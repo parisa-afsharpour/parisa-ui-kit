@@ -1,0 +1,61 @@
+.header {
+  position: fixed;
+  z-index: 10;
+  width: 100%;
+  background-color: var(--main-header-color) !important;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.29);
+  color: #fff;
+}
+.logo {
+  display: inline-block;
+  margin: auto;
+  background-color: var(--brand-logo-background);
+  text-align: center;
+  transition: 0.2s;
+}
+.iconLogo {
+  display: inline-block;
+  height: 46px;
+  transition: 0.3s;
+}
+.textLogo {
+  display: inline-block;
+  height: 41px;
+  transition: 0.3s;
+}
+.trigger {
+  font-size: 18px;
+ color: var(--collaps-sideMenu-icon-color) !important;
+  line-height: 50px;
+  margin-left: 17px;
+  /*change margin left to right*/
+  cursor: pointer;
+  transition: color 0.3s;
+}
+.headerMenu {
+  display: inline-block;
+  float: right;
+  /*change float left to right*/
+  height: 100%;
+  margin-right: 20px !important;
+  /*change margin left to right*/
+  color:var(--header-font-color) !important;
+ //color: var(--header-font-color) !important;
+  font-weight: 700;
+  & > li {
+    height: 100%;
+    padding-top: 2px;
+  }
+}
+.samab {
+  color: var(--system-brandName-color);
+  font-size: 17px;
+  margin-left: 15px;
+  /*change margin left to right*/
+  font-weight: bold;
+}
+@media (max-width: 620px) {
+  .samab {
+    display: none;
+  }
+}

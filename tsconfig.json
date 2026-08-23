@@ -1,0 +1,19 @@
+//tsconfig.json
+{
+  "files": [],
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "jsx": "react-jsx",
+    "moduleResolution": "bundler",
+
+    "strict": true,
+    "skipLibCheck": true,
+    "types": ["vitest/globals"]
+  },
+  /*"references": [  ----> story book
+    "src",
+    *//*{ "path": "./tsconfig.app.json" },
+    { "path": "./tsconfig.node.json" }*//*
+  ]*/
+}

@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "jsx": "react-jsx",
+    "moduleResolution": "bundler",
+
+    "declaration": true,
+    "emitDeclarationOnly": false,
+
+    "rootDir": "src",
+    "outDir": "dist",
+
+    "skipLibCheck": true,
+    "strict": true
+  },
+  "include": ["src"],
+  "exclude": [
+    "**/*.test.*",
+    "**/*.stories.*",
+    "src/dev"
+  ]
+}
