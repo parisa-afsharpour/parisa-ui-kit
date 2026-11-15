@@ -1,73 +1,84 @@
-import React, {
-    createContext,
-    useContext,
-    useMemo,
-} from 'react';
-import { createCSSVariables } from './cssVariables';
+import type { ReactNode } from 'react';
+import { createContext, useContext, useMemo } from 'react';
 import { ConfigProvider } from 'antd';
-
-import type {
-    UITheme,
-    UIThemeConfig,
-} from './theme';
-
-import { mergeTheme } from './mergeTheme';
-
+import { createCSSVariables } from './cssVariables';
 import { createAntdTheme } from './antd-theme';
+import { createSemanticTokens, type SemanticTokens } from './tokens/semantic';
+import { createDarkSemanticTokens } from './tokens/semantic.dark';
+import type { UITheme, ThemeName } from './theme';
+import { getTheme } from './themeRegistry';
+import "./fonts.css";
+
+
+export type ColorMode = 'light' | 'dark';
 
 interface UIThemeContextValue {
     theme: UITheme;
+    semantic: SemanticTokens;
+    colorMode: ColorMode;
 }
 
-const UIThemeContext =
-    createContext<UIThemeContextValue | null>(null);
+const UIThemeContext = createContext<UIThemeContextValue | null>(null);
 
 export interface UIProviderProps {
-    children: React.ReactNode;
-    theme?: UIThemeConfig;
+    children: ReactNode;
+
+    /** Predefined product theme. Defaults to ISC. */
+    theme?: ThemeName;
+
+    /** Semantic color mode. Defaults to Light. */
+    colorMode?: ColorMode;
 }
 
-export const UIProvider: React.FC<UIProviderProps> = ({
-                                                          children,
-                                                          theme: customTheme,
-                                                      }) => {
+export function UIProvider({
+                               children,
+                               theme: themeName = 'isc',
+                               colorMode = 'light',
+                           }: UIProviderProps) {
 
     const theme = useMemo(
-        () => mergeTheme(customTheme),
-        [customTheme]
+        () => getTheme(themeName),
+        [themeName]
     );
+
+
+    const semantic = useMemo<SemanticTokens>(() => {
+        return colorMode === 'dark'
+            ? createDarkSemanticTokens(theme)
+            : createSemanticTokens(theme);
+    }, [theme, colorMode]);
+
 
     const antdTheme = useMemo(
-        () => createAntdTheme(theme),
-        [theme]
+        () => createAntdTheme(theme, semantic, colorMode),
+        [theme, semantic, colorMode]
     );
-
-    const cssVariables = useMemo(
-        () => createCSSVariables(theme),
-        [theme]
+    const cssVariables = useMemo(() => createCSSVariables(theme, semantic), [theme, semantic]);
+    const contextValue = useMemo(
+        () => ({ theme, semantic, colorMode }),
+        [theme, semantic, colorMode],
     );
 
     return (
-        <UIThemeContext.Provider value={{ theme }}>
+        <UIThemeContext.Provider value={contextValue}>
             <ConfigProvider theme={antdTheme}>
-                <div style={cssVariables}>
+                <div data-ui-color-mode={colorMode} style={cssVariables}>
                     {children}
                 </div>
             </ConfigProvider>
         </UIThemeContext.Provider>
     );
-};
+}
 
-export const useUITheme = () => {
-
-    const context =
-        useContext(UIThemeContext);
-
+function useUIContext(): UIThemeContextValue {
+    const context = useContext(UIThemeContext);
     if (!context) {
-        throw new Error(
-            'useUITheme must be used inside UIProvider'
-        );
+        throw new Error('UI Kit hooks must be used inside UIProvider');
     }
+    return context;
+}
 
-    return context.theme;
-};
+export const useUITheme = (): UITheme => useUIContext().theme;
+export const useUISemanticTokens = (): SemanticTokens => useUIContext().semantic;
+export const useUIColorMode = (): ColorMode => useUIContext().colorMode;
+

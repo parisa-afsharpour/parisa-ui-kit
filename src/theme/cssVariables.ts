@@ -1,59 +1,68 @@
-//src/theme/cssVariables.ts
-
-import type React from 'react';
+import type { CSSProperties } from 'react';
 import type { UITheme } from './theme';
+import { createSemanticTokens, type SemanticTokens } from './tokens/semantic';
 
-type CSSVariables = React.CSSProperties & {
+type CSSVariables = CSSProperties & {
     [key: `--${string}`]: string | number;
 };
 
-export const createCSSVariables = (
-    theme: UITheme
-): CSSVariables => {
-    return {
-        '--ui-color-primary':
-        theme.colors.primary,
+type TokenTree = { readonly [key: string]: string | TokenTree };
 
-        '--ui-color-success':
-        theme.colors.success,
+/** Publish active Light/Dark semantic tokens as CSS variables. */
+function appendSemanticVariables(
+    target: CSSVariables,
+    tokens: TokenTree,
+    segments: string[] = [],
+): void {
+    for (const [key, value] of Object.entries(tokens)) {
+        const path = [...segments, key];
+        if (typeof value === 'string') {
+            target[`--ui-semantic-${path.join('-')}`] = value; //semantic.base.outline.bg.default ---> --ui-semantic-base-outline-bg-default
+        } else {
+            appendSemanticVariables(target, value, path);
+        }
+    }
+}
 
-        '--ui-color-warning':
-        theme.colors.warning,
+export function createCSSVariables(
+    theme: UITheme,
+    semantic: SemanticTokens = createSemanticTokens(theme),
+): CSSVariables {
+    const vars: CSSVariables = {};
 
-        '--ui-color-error':
-        theme.colors.error,
+    // Identity palettes are resolved from the selected predefined theme.
+    const palettes = ['brand', 'foundation', 'success', 'warning', 'error', 'info'] as const;
+    for (const palette of palettes) {
+        for (const [shade, color] of Object.entries(theme[palette])) {
+            if (shade !== 'key') vars[`--ui-${palette}-${shade}`] = color;
+        }
+    }
+    for (const palette of ['brightness', 'neutral'] as const) {
+        for (const [shade, color] of Object.entries(theme.achromatic[palette])) {
+            if (shade !== 'key') vars[`--ui-${palette}-${shade}`] = color;
+        }
+    }
 
-        '--ui-color-text':
-        theme.colors.text,
+    // Include the actual PRSES semantic roles, not only generic color aliases.
+    appendSemanticVariables(vars, semantic as unknown as TokenTree);
 
-        '--ui-color-text-secondary':
-        theme.colors.textSecondary,
+    // Legacy contract, retained until TextField/other components migrate.
+    vars['--ui-color-primary'] = semantic.color.primary;
+    vars['--ui-color-success'] = semantic.color.success;
+    vars['--ui-color-warning'] = semantic.color.warning;
+    vars['--ui-color-error'] = semantic.color.error;
+    vars['--ui-color-text'] = semantic.color.text;
+    vars['--ui-color-text-secondary'] = semantic.color.textSecondary;
+    vars['--ui-color-text-disabled'] = semantic.color.textDisabled;
+    vars['--ui-color-border'] = semantic.color.border;
+    vars['--ui-color-border-hover'] = semantic.color.borderHover;
+    vars['--ui-color-background'] = semantic.color.background;
+    vars['--ui-color-background-disabled'] = semantic.color.backgroundDisabled;
+    vars['--ui-textfield-border-focus'] = semantic.color.primary;
+    vars['--ui-textfield-error'] = semantic.color.error;
+    vars['--ui-textfield-success'] = semantic.color.success;
+    vars['--ui-textfield-warning'] = semantic.color.warning;
 
-        '--ui-color-text-disabled':
-        theme.colors.textDisabled,
+    return vars;
+}
 
-        '--ui-color-border':
-        theme.colors.border,
-
-        '--ui-color-border-hover':
-        theme.colors.borderHover,
-
-        '--ui-color-background':
-        theme.colors.background,
-
-        '--ui-color-background-disabled':
-        theme.colors.backgroundDisabled,
-
-        '--ui-textfield-border-focus':
-        theme.colors.primary,
-
-        '--ui-textfield-error':
-        theme.colors.error,
-
-        '--ui-textfield-success':
-        theme.colors.success,
-
-        '--ui-textfield-warning':
-        theme.colors.warning,
-    };
-};

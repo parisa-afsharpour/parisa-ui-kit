@@ -1,0 +1,184 @@
+
+/**
+ * ISC Core Design System
+ * Button Component Styles
+ *
+ * Anatomy       -> Dimensions, Spacing, Radius
+ * Typography    -> Font Size, Line Height
+ * Semantic      -> Colors and Visual States
+ *
+ * CSS Variables are provided by Button.tsx.
+ */
+
+/* ==========================================
+   1. Base
+   ========================================== */
+
+.ui-button.ant-btn {
+    box-sizing: border-box;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-direction: row;
+    flex-wrap: nowrap;
+    flex-shrink: 0;
+
+    /* Dimensions */
+    /*height: var(--button-height);*/
+    height: auto;
+    min-height: 0;
+
+    padding-inline: var(--button-padding-inline);
+    padding-block: var(--button-padding-block);
+
+    gap: var(--button-gap);
+
+    /* Border */
+    border-width: var(--button-border-width);
+    border-style: solid;
+    border-radius: var(--button-radius);
+
+    /* Typography */
+    font-size: var(--button-font-size);
+    line-height: var(--button-line-height);
+    letter-spacing: 0;
+
+    white-space: nowrap;
+
+    /* Default Colors */
+    background-color: var(--button-default-bg);
+    color: var(--button-default-text);
+    border-color: var(--button-default-border);
+
+    /* Effects */
+    box-shadow: none;
+
+    transition:
+            background-color 150ms ease,
+            border-color 150ms ease,
+            color 150ms ease;
+
+    cursor: pointer;
+}
+
+/* ==========================================
+   2. Button Label
+   ========================================== */
+
+.ui-button__label {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 0;
+
+    font: inherit;
+    white-space: inherit;
+}
+
+/* ==========================================
+   3. Icons
+   ========================================== */
+
+.ui-button__start-icon,
+.ui-button__end-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: var(--button-icon-size);
+    height: var(--button-icon-size);
+
+    flex: 0 0 var(--button-icon-size);
+
+    font-size: var(--button-icon-size);
+    line-height: 1;
+}
+
+.ui-button__start-icon svg,
+.ui-button__end-icon svg {
+    width: 100%;
+    height: 100%;
+}
+
+/* ==========================================
+   4. Hover
+   ========================================== */
+
+.ui-button.ant-btn:hover:not(:disabled):not(.ant-btn-disabled) {
+    background-color: var(--button-hover-bg);
+    color: var(--button-hover-text);
+    border-color: var(--button-hover-border);
+
+    box-shadow: none;
+}
+
+/* ==========================================
+   5. Pressed
+   ========================================== */
+
+.ui-button.ant-btn:active:not(:disabled):not(.ant-btn-disabled) {
+    background-color: var(--button-pressed-bg);
+    color: var(--button-pressed-text);
+    border-color: var(--button-pressed-border);
+
+    box-shadow: none;
+}
+
+/* ==========================================
+   6. Focus
+   ========================================== */
+
+.ui-button.ant-btn:focus-visible:not(:disabled):not(.ant-btn-disabled) {
+    background-color: var(--button-focus-bg);
+    color: var(--button-focus-text);
+    border-color: var(--button-focus-border);
+
+    outline: 2px solid
+    var(--button-focus-ring-color, currentColor);
+
+    outline-offset: 2px;
+    box-shadow: none;
+}
+
+/* ==========================================
+   7. Disabled
+   ========================================== */
+
+.ui-button.ant-btn:disabled,
+.ui-button.ant-btn.ant-btn-disabled {
+    background-color: var(--button-disabled-bg);
+    color: var(--button-disabled-text);
+    border-color: var(--button-disabled-border);
+
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+/* ==========================================
+   8. Loading
+   ========================================== */
+
+.ui-button.ant-btn.ant-btn-loading {
+    cursor: wait;
+}
+
+/* ==========================================
+   9. Block
+   ========================================== */
+
+.ui-button.ant-btn.ant-btn-block {
+    width: 100%;
+}
+
+/* ==========================================
+   10. Reduced Motion
+   ========================================== */
+
+@media (prefers-reduced-motion: reduce) {
+    .ui-button.ant-btn {
+        transition: none;
+    }
+}

@@ -1,3 +1,10 @@
+import { createTheme, type UITheme, type UIThemeConfig } from './theme';
+
+export const mergeTheme = (customTheme?: UIThemeConfig): UITheme =>
+    createTheme(customTheme);
+
+
+/*
 import {
     defaultTheme,
     type UITheme,
@@ -38,4 +45,4 @@ export const mergeTheme = (
             ...customTheme?.typography,
         },
     };
-};
+};*/

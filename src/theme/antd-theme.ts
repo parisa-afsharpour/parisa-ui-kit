@@ -1,65 +1,60 @@
-// src/theme/antd-theme.ts
 
-
-import type { ThemeConfig } from 'antd';
-
+import { theme as antdTheme, type ThemeConfig } from 'antd';
 import type { UITheme } from './theme';
+import {
+    createSemanticTokens,
+    type SemanticTokens,
+} from './tokens/semantic';
+import { fontFamily } from './tokens/typography';
+import type { ColorMode } from './UIProvider';
 
-export const createAntdTheme = (
-    theme: UITheme
-): ThemeConfig => {
-
+/**
+ * Map UI Kit semantic tokens to Ant Design tokens.
+ */
+export function createAntdTheme(
+    theme: UITheme,
+    semantic: SemanticTokens = createSemanticTokens(theme),
+    colorMode: ColorMode = 'light',
+): ThemeConfig {
     return {
+        algorithm:
+            colorMode === 'dark'
+                ? antdTheme.darkAlgorithm
+                : antdTheme.defaultAlgorithm,
+
         token: {
             colorPrimary:
-            theme.colors.primary,
+            semantic.primary.solid.bg.alter,
 
             colorError:
-            theme.colors.error,
+            semantic.base.solid.bg.state.error,
 
             colorSuccess:
-            theme.colors.success,
+            semantic.base.solid.bg.state.success,
 
             colorWarning:
-            theme.colors.warning,
+            semantic.base.solid.border.state.warning,
 
             colorText:
-            theme.colors.text,
+            semantic.base.outline.text.default,
 
             colorTextSecondary:
-            theme.colors.textSecondary,
+            semantic.base.outline.text.paraghraph,
 
             colorTextDisabled:
-            theme.colors.textDisabled,
+            semantic.base.outline.text.state.disable,
 
             colorBorder:
-            theme.colors.border,
+            semantic.base.outline.border.default,
 
             colorBgContainer:
-            theme.colors.background,
+            semantic.base.outline.bg.default,
 
             colorBgContainerDisabled:
-            theme.colors.backgroundDisabled,
-
-            borderRadius:
-                Number(
-                    theme.radius.medium
-                        .replace('px', '')//بهتره بعداً این را تمیز کنیم و Radius را طوری طراحی کنیم که هم CSS و هم AntD بتوانند از آن استفاده کنند.
-                ),
+            semantic.base.outline.bg.state.disable,
 
             fontFamily:
-            theme.typography.fontFamily.sans,
+                `"${fontFamily.primary}", Arial, sans-serif`,
         },
     };
-};
-
-
-// import type { ThemeConfig } from "antd"
-//
-// export const antdTheme: ThemeConfig = {
-//     token: {
-//         colorPrimary: "#4f46e5",
-//         borderRadius: 10,
-//         fontFamily: "Inter, system-ui, sans-serif",
-//     },
-// }
+}

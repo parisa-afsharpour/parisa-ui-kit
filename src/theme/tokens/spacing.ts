@@ -1,4 +1,31 @@
 export const spacing = {
+    none: '0px',
+    odd: '1px',
+    xs: '2px',
+    s: '4px',
+    sm: '6px',
+    m: '8px',
+    ml: '10px',
+    '2ml': '12px',
+    l: '16px',
+    xl: '20px',
+    '2xl': '24px',
+    '3xl': '32px',
+    '4xl': '48px',
+    '5xl': '64px',
+    '6xl': '80px',
+    '7xl': '96px',
+    '8xl': '112px',
+    '9xl': '128px',
+    '10xl': '144px',
+    '11xl': '160px',
+    '12xl': '176px',
+    '13xl': '192px',
+    '14xl': '208px',
+} as const;
+
+/*
+export const spacing = {
     0: '0px',
     1: '4px',
     2: '8px',
@@ -10,4 +37,4 @@ export const spacing = {
     10: '40px',
     12: '48px',
     16: '64px',
-} as const;
+} as const;*/
